@@ -1,7 +1,8 @@
 /// <reference path="wheel.ts"/>
 
 class Car {
-    // edit
+    // car haha
+
     private speed: number;
     private div: HTMLElement;
     private x: number;
