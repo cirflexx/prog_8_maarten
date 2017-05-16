@@ -4,6 +4,8 @@ class Wheel {
     private x:number;
     public y:number;
 
+    // new wheel
+
     public speed:number;
                         
     constructor(parent:HTMLElement, offset:number) {
