@@ -1,4 +1,4 @@
 interface Behaviour {
-    onKeyDown():void;
     draw():void;
+    onKeyDown(event:KeyboardEvent);
 }

@@ -3,6 +3,7 @@ class Wheel {
     private div:HTMLElement;
     private x:number;
     public y:number;
+    
 
     // new wheel
 
@@ -13,7 +14,7 @@ class Wheel {
         parent.appendChild(this.div);
 
         this.x = offset;
-        this.y = 30;
+        this.y = 20;
         this.speed = 0;
     }
 

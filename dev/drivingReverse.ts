@@ -1,11 +1,11 @@
-class Driving implements Behaviour {
+class drivingReverse implements Behaviour {
     
     car:Car;
-    Behaviour:Behaviour;
     
     constructor(c:Car){
         this.car = c;
-        this.car.speed = 4;
+        console.log("reverse");
+        this.car.speed = -3;
     }
     draw(){
         this.car.x += this.car.speed;

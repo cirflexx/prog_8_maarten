@@ -41,7 +41,7 @@ plateau {
 
 car {
     background-image: url(../images/car.png);
-    width:145px; height: 55px;
+    width:145px; height: 45px;
 }
 
 .crashed {
@@ -61,7 +61,7 @@ cloud {
 
 block {
     background-image: url(../images/block.png);
-    width:32px; height: 31px;
+    width:626px; height: 46px;
 }
 
 
