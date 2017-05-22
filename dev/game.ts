@@ -44,13 +44,8 @@ class Game {
         
         for (var t of this.tracks) {
             if (t.removeMe) {
-                // deze appel moet uit het speld
-                // verwijder uit array
-                // this.Apples.remove(a);
                 var i = this.tracks.indexOf(t);
-
                 this.tracks.splice(i, 1);
-
             }
                 t.draw();
         }
