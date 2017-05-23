@@ -10,6 +10,7 @@ Inheritance:
 Car en track erven de div,x en y positie van gameobject.ts
 
 Composition:
+De Car en Wheel maken gebruik van composition.
 
 Encapsulation:
 Ik maak gebruik van private,protected en public. In game.ts bijvoorbeeld is te zien dat de functie spawnobject private is, en dus alleen maar in de game aangeroepen kan worden. Public is de instance van de game, zo kan de functie endgame overal aangeroepen worden.
@@ -25,6 +26,8 @@ Zo heeft de car de volgende behaviours:
 -drivingUp
 -off
 -speedUp
+
+UML: http://imgur.com/PtvGWds
 
 Installatie instructies:
 
