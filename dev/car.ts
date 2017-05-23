@@ -1,24 +1,22 @@
 /// <reference path="wheel.ts"/>
+/// <reference path="gameobject.ts" />
 
-class Car {
+
+class Car extends gameobject {
     public behaviour : Behaviour;
 
     public speed: number;
     public div: HTMLElement;
-    public x: number;
-    public y: number;
     public wheel1: Wheel;
     public wheel2: Wheel;
 
     constructor(parent: HTMLElement) {
-        this.div = document.createElement("car");
-        parent.appendChild(this.div);
+        super(parent, "car");
+        this.startPosition(0,220);
 
         this.behaviour = new Off(this);
 
         this.speed = 2;
-        this.x = 0;
-        this.y = 220;
 
         this.wheel1 = new Wheel(this.div, 3);
         this.wheel2 = new Wheel(this.div, 101);
@@ -30,7 +28,7 @@ class Car {
     private onKeyDown(e: KeyboardEvent) {
         console.log(e.key);
         switch(e.keyCode){
-        case 66:            
+        case 16:            
             console.log("speedUp");
             this.behaviour = new speedUp(this);
             break;
@@ -64,6 +62,12 @@ class Car {
         if(this.x > 675){
             this.speed = -1;
             this.x += this.speed;
+        }
+        if(this.x < 0){
+            this.behaviour = new Driving(this);
+        }
+        if(this.y > 550){
+            this.behaviour = new DrivingUp(this);
         }
         
         // if car is crashed, end game;

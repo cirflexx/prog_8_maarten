@@ -1,6 +1,6 @@
 class Off implements Behaviour {
     
-    car:Car;
+    private car:Car;
     
     constructor(c:Car){
         this.car = c;

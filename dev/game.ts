@@ -24,14 +24,14 @@ class Game {
     }
 
     private spawnObject(): void {
-        this.tracks.push(new Track(this.container,Math.random() * window.innerWidth,Math.random() * window.innerHeight));
+        this.tracks.push(new Track(this.container));
         console.log("test");
     } 
 
     private gameLoop(){
         
         this.spawnCounter ++;
-        if(this.spawnCounter > 60){ 
+        if(this.spawnCounter > 180){ 
             this.spawnObject();
             this.spawnCounter = 0; 
         }

@@ -1,6 +1,6 @@
 class DrivingUp implements Behaviour {
     
-    car:Car;
+    private car:Car;
     private jumpDirection: number;
     constructor(c:Car){
         this.car = c;

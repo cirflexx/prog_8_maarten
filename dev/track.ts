@@ -1,19 +1,15 @@
-class Track {
+class Track extends gameobject {
 
     public speed:number;
     public div:HTMLElement;
-    public x:number;
-    public y:number;
+    public parent:HTMLElement;
 
     public removeMe:boolean;
             
-    constructor(parent:HTMLElement, xpos:number, ypos:number) {
-        this.div = document.createElement("block");
-        parent.appendChild(this.div);
-
+    constructor(parent:HTMLElement) {
+        super(parent,"block");
+        this.startPosition(Math.random() * window.innerWidth+200,Math.random() * window.innerHeight);
         this.speed = -5;
-        this.x = xpos;
-        this.y = ypos; 
     }
 
     public draw():void {
@@ -31,7 +27,8 @@ class Track {
         this.removeMe = false;
 
         // remove of tracks not working yet.
-        // parent.removeChild(this.div);
+        //this.parent = document.getElementById("container");
+        //this.parent.removeChild(this.div);
     }
 
 }

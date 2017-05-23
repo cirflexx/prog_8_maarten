@@ -1,8 +1,7 @@
 class Driving implements Behaviour {
     
-    car:Car;
-    Behaviour:Behaviour;
-    
+    private car:Car;
+        
     constructor(c:Car){
         this.car = c;
         this.car.speed = 4;
