@@ -23,44 +23,43 @@ class Game {
     return Game.instance;
     }
 
-    private spawnObject(): void {
-        this.tracks.push(new Track(this.container));
-        console.log("test");
-    } 
-
     private gameLoop(){
         
         this.spawnCounter ++;
         if(this.spawnCounter > 180){ 
-            this.spawnObject();
+            this.tracks.push(new Track(this.container));
             this.spawnCounter = 0; 
         }
         this.updateElements(); 
         this.car.draw();
+
+        for(let t of this.tracks){
+            if(t.x < 0 - t.width){
+                Util.removeFromGame(t, this.tracks);
+            }
+            if(Util.checkCollision(this.car,t)){
+                console.log("CRASH");
+            }            
+        }        
+
         requestAnimationFrame(() => this.gameLoop());
     }
 
     private updateElements(): void {
         
         for (var t of this.tracks) {
-            if (t.removeMe) {
-                var i = this.tracks.indexOf(t);
-                this.tracks.splice(i, 1);
-            }
                 t.draw();
         }
-        
     }
 
     public endGame(){
         // endgame
     }
-
-    
-} 
+}
 
 
 // load
 window.addEventListener("load", function() {
     let g = Game.getInstance();
 });
+

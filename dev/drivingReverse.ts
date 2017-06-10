@@ -4,7 +4,6 @@ class drivingReverse implements Behaviour {
     
     constructor(c:Car){
         this.car = c;
-        console.log("reverse");
         this.car.speed = -3;
     }
     draw(){

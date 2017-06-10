@@ -3,6 +3,8 @@ class gameobject {
     public div : HTMLElement;
     public x : number;
     public y : number;
+    public width: number;
+    public height: number;
 
     constructor(tagname:HTMLElement,divname:string){
         

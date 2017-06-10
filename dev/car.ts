@@ -1,6 +1,6 @@
 /// <reference path="wheel.ts"/>
 /// <reference path="gameobject.ts" />
-
+/// <reference path="enum.ts" />
 
 class Car extends gameobject {
     public behaviour : Behaviour;
@@ -12,7 +12,10 @@ class Car extends gameobject {
 
     constructor(parent: HTMLElement) {
         super(parent, "car");
-        this.startPosition(0,220);
+        this.startPosition(0,225);
+
+        this.width = 145;
+        this.height = 45;
 
         this.behaviour = new Off(this);
 
@@ -24,34 +27,25 @@ class Car extends gameobject {
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e));
     }
 
-
     private onKeyDown(e: KeyboardEvent) {
-        console.log(e.key);
         switch(e.keyCode){
-        case 16:            
-            console.log("speedUp");
+        case Keys.Shift:            
             this.behaviour = new speedUp(this);
             break;
-        case 39:            
-            console.log("Driving");
+        case Keys.Right:            
             this.behaviour = new Driving(this);
             break;            
-        case 38:            
-            console.log("Drivingup");
+        case Keys.Up:         
             this.behaviour = new DrivingUp(this);
             break;
-        case 40:            
-            console.log("DrivingDown");
+        case Keys.Down:            
             this.behaviour = new DrivingDown(this);
             break;
-        case 37:            
-            console.log("DrivingDown");
+        case Keys.Left:            
             this.behaviour = new drivingReverse(this);
             break;              
         }
 
-        
-        
         this.behaviour.onKeyDown(e);
     }
 
@@ -69,12 +63,6 @@ class Car extends gameobject {
         if(this.y > 550){
             this.behaviour = new DrivingUp(this);
         }
-        
-        // if car is crashed, end game;
-        // if(Car crashed){
-        //    let g : Game = Game.getInstance();
-        //    g.endGame();
-        // }
 
         this.behaviour.draw();
 

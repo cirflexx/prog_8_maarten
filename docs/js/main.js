@@ -29,12 +29,22 @@ var gameobject = (function () {
     };
     return gameobject;
 }());
+var Keys;
+(function (Keys) {
+    Keys[Keys["Shift"] = 16] = "Shift";
+    Keys[Keys["Up"] = 38] = "Up";
+    Keys[Keys["Down"] = 40] = "Down";
+    Keys[Keys["Left"] = 37] = "Left";
+    Keys[Keys["Right"] = 39] = "Right";
+})(Keys || (Keys = {}));
 var Car = (function (_super) {
     __extends(Car, _super);
     function Car(parent) {
         var _this = this;
         _super.call(this, parent, "car");
-        this.startPosition(0, 220);
+        this.startPosition(0, 225);
+        this.width = 145;
+        this.height = 45;
         this.behaviour = new Off(this);
         this.speed = 2;
         this.wheel1 = new Wheel(this.div, 3);
@@ -42,26 +52,20 @@ var Car = (function (_super) {
         window.addEventListener("keydown", function (e) { return _this.onKeyDown(e); });
     }
     Car.prototype.onKeyDown = function (e) {
-        console.log(e.key);
         switch (e.keyCode) {
-            case 16:
-                console.log("speedUp");
+            case Keys.Shift:
                 this.behaviour = new speedUp(this);
                 break;
-            case 39:
-                console.log("Driving");
+            case Keys.Right:
                 this.behaviour = new Driving(this);
                 break;
-            case 38:
-                console.log("Drivingup");
+            case Keys.Up:
                 this.behaviour = new DrivingUp(this);
                 break;
-            case 40:
-                console.log("DrivingDown");
+            case Keys.Down:
                 this.behaviour = new DrivingDown(this);
                 break;
-            case 37:
-                console.log("DrivingDown");
+            case Keys.Left:
                 this.behaviour = new drivingReverse(this);
                 break;
         }
@@ -103,7 +107,7 @@ var Driving = (function () {
 var DrivingDown = (function () {
     function DrivingDown(c) {
         this.car = c;
-        this.jumpDirection = +20;
+        this.jumpDirection = +45;
     }
     DrivingDown.prototype.draw = function () {
         this.car.x += this.car.speed;
@@ -119,7 +123,6 @@ var DrivingDown = (function () {
 var drivingReverse = (function () {
     function drivingReverse(c) {
         this.car = c;
-        console.log("reverse");
         this.car.speed = -3;
     }
     drivingReverse.prototype.draw = function () {
@@ -132,7 +135,7 @@ var drivingReverse = (function () {
 var DrivingUp = (function () {
     function DrivingUp(c) {
         this.car = c;
-        this.jumpDirection = -20;
+        this.jumpDirection = -45;
     }
     DrivingUp.prototype.draw = function () {
         this.car.x += this.car.speed;
@@ -140,7 +143,6 @@ var DrivingUp = (function () {
         if (this.car.y > 0) {
             this.jumpDirection = 0;
         }
-        console.log(this.car.y);
     };
     DrivingUp.prototype.onKeyDown = function () {
     };
@@ -161,28 +163,29 @@ var Game = (function () {
         }
         return Game.instance;
     };
-    Game.prototype.spawnObject = function () {
-        this.tracks.push(new Track(this.container));
-        console.log("test");
-    };
     Game.prototype.gameLoop = function () {
         var _this = this;
         this.spawnCounter++;
         if (this.spawnCounter > 180) {
-            this.spawnObject();
+            this.tracks.push(new Track(this.container));
             this.spawnCounter = 0;
         }
         this.updateElements();
         this.car.draw();
+        for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
+            var t = _a[_i];
+            if (t.x < 0 - t.width) {
+                Util.removeFromGame(t, this.tracks);
+            }
+            if (Util.checkCollision(this.car, t)) {
+                console.log("CRASH");
+            }
+        }
         requestAnimationFrame(function () { return _this.gameLoop(); });
     };
     Game.prototype.updateElements = function () {
         for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
             var t = _a[_i];
-            if (t.removeMe) {
-                var i = this.tracks.indexOf(t);
-                this.tracks.splice(i, 1);
-            }
             t.draw();
         }
     };
@@ -226,21 +229,34 @@ var Track = (function (_super) {
     __extends(Track, _super);
     function Track(parent) {
         _super.call(this, parent, "block");
-        this.startPosition(Math.random() * window.innerWidth + 200, Math.random() * window.innerHeight);
+        this.x = window.innerWidth + 700;
+        this.y = 45 * Math.ceil(Math.random() * 10);
         this.speed = -5;
+        this.width = 626;
+        this.height = 45;
     }
     Track.prototype.draw = function () {
-        if (this.x > window.innerHeight + 200) {
-            this.removeFromGame();
-        }
-        else {
-            this.x += this.speed;
-            this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
-        }
-    };
-    Track.prototype.removeFromGame = function () {
-        this.removeMe = false;
+        this.x += this.speed;
+        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
     };
     return Track;
 }(gameobject));
+var Util = (function () {
+    function Util() {
+    }
+    Util.checkCollision = function (go1, go2) {
+        return (go1.x < go2.x + go2.width &&
+            go1.x + go1.width > go2.x &&
+            go1.y < go2.y + go2.height &&
+            go1.height + go1.y > go2.y);
+    };
+    Util.removeFromGame = function (go, arr) {
+        go.div.remove();
+        var i = arr.indexOf(go);
+        if (i != -1) {
+            arr.splice(i, 1);
+        }
+    };
+    return Util;
+}());
 //# sourceMappingURL=main.js.map

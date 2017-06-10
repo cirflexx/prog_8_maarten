@@ -4,7 +4,7 @@ class DrivingDown implements Behaviour {
     private jumpDirection: number;
     constructor(c:Car){
         this.car = c;
-        this.jumpDirection = +20;
+        this.jumpDirection = +45;
     }
     draw(){
         this.car.x += this.car.speed;
