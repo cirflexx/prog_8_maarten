@@ -6,6 +6,16 @@ De typscript code is te vinden in de dev folder.
 ### Singleton:
 In game.ts wordt er een instance gemaakt van de game, daardoor is die in alle bestand aanspreekbaar.
 
+### Observer:
+
+### Namespaces:
+
+### Polymorphism:
+
+### Enumeraties:
+
+### Abstract:
+
 ### Static:
 De game instance is static, zo kan het in elk bestand aangeroepen worden.
 

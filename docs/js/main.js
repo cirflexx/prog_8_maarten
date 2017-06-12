@@ -4,13 +4,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Wheel = (function () {
-    function Wheel(parent, offset) {
+    function Wheel(parent, offset, c) {
         this.div = document.createElement("wheel");
         parent.appendChild(this.div);
         this.x = offset;
         this.y = 20;
         this.speed = 0;
+        this.car = c;
+        this.car.subscribe(this);
     }
+    Wheel.prototype.notify = function () {
+        this.speed = 2;
+        console.log("test");
+    };
     Wheel.prototype.draw = function () {
         this.x += this.speed;
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
@@ -42,119 +48,95 @@ var Car = (function (_super) {
     function Car(parent) {
         var _this = this;
         _super.call(this, parent, "car");
+        this.observers = new Array();
         this.startPosition(0, 225);
         this.width = 145;
         this.height = 45;
-        this.behaviour = new Off(this);
+        this.behaviour = new Drive.Off(this);
         this.speed = 2;
-        this.wheel1 = new Wheel(this.div, 3);
-        this.wheel2 = new Wheel(this.div, 101);
+        this.wheel1 = new Wheel(this.div, 3, this);
+        this.wheel2 = new Wheel(this.div, 101, this);
         window.addEventListener("keydown", function (e) { return _this.onKeyDown(e); });
     }
     Car.prototype.onKeyDown = function (e) {
         switch (e.keyCode) {
             case Keys.Shift:
-                this.behaviour = new speedUp(this);
+                this.behaviour = new Drive.speedUp(this);
                 break;
             case Keys.Right:
-                this.behaviour = new Driving(this);
+                this.behaviour = new Drive.Forward(this);
                 break;
             case Keys.Up:
-                this.behaviour = new DrivingUp(this);
+                this.behaviour = new Drive.Up(this);
                 break;
             case Keys.Down:
-                this.behaviour = new DrivingDown(this);
+                this.behaviour = new Drive.Down(this);
                 break;
             case Keys.Left:
-                this.behaviour = new drivingReverse(this);
+                this.behaviour = new Drive.Reverse(this);
                 break;
         }
         this.behaviour.onKeyDown(e);
     };
     Car.prototype.draw = function () {
+        var _this = this;
         if (this.y < 0) {
-            this.behaviour = new DrivingDown(this);
+            this.behaviour = new Drive.Down(this);
         }
         if (this.x > 675) {
             this.speed = -1;
             this.x += this.speed;
         }
         if (this.x < 0) {
-            this.behaviour = new Driving(this);
+            this.behaviour = new Drive.Forward(this);
         }
         if (this.y > 550) {
-            this.behaviour = new DrivingUp(this);
+            this.behaviour = new Drive.Up(this);
         }
         this.behaviour.draw();
-        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+        if (this.crashValue) {
+            for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
+                var o = _a[_i];
+                o.notify();
+            }
+            TweenLite.to(this.div, 3, { x: 1000, y: 200, rotation: 600 });
+            setTimeout(function () { return _this.removeCar(); }, 2000);
+        }
+        else {
+            this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+        }
         this.wheel1.draw();
         this.wheel2.draw();
     };
+    Car.prototype.crash = function () {
+        console.log("crash");
+        this.crashValue = true;
+    };
+    Car.prototype.removeCar = function () {
+        console.log("remove");
+        this.div.remove();
+        var g = Game.getInstance();
+        g.endGame();
+    };
+    Car.prototype.subscribe = function (o) {
+        this.observers.push(o);
+    };
+    Car.prototype.unsubscribe = function (o) {
+    };
     return Car;
 }(gameobject));
-var Driving = (function () {
-    function Driving(c) {
-        this.car = c;
-        this.car.speed = 4;
-    }
-    Driving.prototype.draw = function () {
-        this.car.x += this.car.speed;
-    };
-    Driving.prototype.onKeyDown = function () {
-    };
-    return Driving;
-}());
-var DrivingDown = (function () {
-    function DrivingDown(c) {
-        this.car = c;
-        this.jumpDirection = +45;
-    }
-    DrivingDown.prototype.draw = function () {
-        this.car.x += this.car.speed;
-        this.car.y += this.jumpDirection;
-        if (this.car.y > 0) {
-            this.jumpDirection = 0;
-        }
-    };
-    DrivingDown.prototype.onKeyDown = function () {
-    };
-    return DrivingDown;
-}());
-var drivingReverse = (function () {
-    function drivingReverse(c) {
-        this.car = c;
-        this.car.speed = -3;
-    }
-    drivingReverse.prototype.draw = function () {
-        this.car.x += this.car.speed;
-    };
-    drivingReverse.prototype.onKeyDown = function () {
-    };
-    return drivingReverse;
-}());
-var DrivingUp = (function () {
-    function DrivingUp(c) {
-        this.car = c;
-        this.jumpDirection = -45;
-    }
-    DrivingUp.prototype.draw = function () {
-        this.car.x += this.car.speed;
-        this.car.y += this.jumpDirection;
-        if (this.car.y > 0) {
-            this.jumpDirection = 0;
-        }
-    };
-    DrivingUp.prototype.onKeyDown = function () {
-    };
-    return DrivingUp;
-}());
 var Game = (function () {
     function Game() {
         var _this = this;
         this.tracks = new Array();
+        this.score = 0;
         this.spawnCounter = 0;
+        this.end = false;
+        this.lives = 1;
         this.container = document.getElementById("container");
         this.car = new Car(this.container);
+        document.getElementById("lives").innerHTML = "lives: " + this.lives.toString();
+        document.getElementById("score").innerHTML = "Score: " + this.score.toString();
         requestAnimationFrame(function () { return _this.gameLoop(); });
     }
     Game.getInstance = function () {
@@ -169,6 +151,8 @@ var Game = (function () {
         if (this.spawnCounter > 180) {
             this.tracks.push(new Track(this.container));
             this.spawnCounter = 0;
+            this.score++;
+            document.getElementById("score").innerHTML = "Score: " + this.score.toString();
         }
         this.updateElements();
         this.car.draw();
@@ -178,10 +162,20 @@ var Game = (function () {
                 Util.removeFromGame(t, this.tracks);
             }
             if (Util.checkCollision(this.car, t)) {
-                console.log("CRASH");
+                Util.removeFromGame(t, this.tracks);
+                this.lives--;
+                if (this.lives == -1) {
+                    this.car.crash();
+                }
+                document.getElementById("lives").innerHTML = "Levens: " + this.lives.toString();
             }
         }
-        requestAnimationFrame(function () { return _this.gameLoop(); });
+        if (this.end) {
+            console.log("stop");
+        }
+        else {
+            requestAnimationFrame(function () { return _this.gameLoop(); });
+        }
     };
     Game.prototype.updateElements = function () {
         for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
@@ -190,41 +184,13 @@ var Game = (function () {
         }
     };
     Game.prototype.endGame = function () {
+        this.end = true;
     };
     return Game;
 }());
 window.addEventListener("load", function () {
     var g = Game.getInstance();
 });
-var Off = (function () {
-    function Off(c) {
-        this.car = c;
-    }
-    Off.prototype.draw = function () {
-        this.car.speed = 0;
-        ;
-    };
-    Off.prototype.onKeyDown = function (event) {
-        switch (event.keyCode) {
-            case 39:
-                this.car.behaviour = new Driving(this.car);
-                break;
-        }
-    };
-    return Off;
-}());
-var speedUp = (function () {
-    function speedUp(c) {
-        this.car = c;
-    }
-    speedUp.prototype.draw = function () {
-        this.car.speed = 5;
-        this.car.x += this.car.speed;
-    };
-    speedUp.prototype.onKeyDown = function () {
-    };
-    return speedUp;
-}());
 var Track = (function (_super) {
     __extends(Track, _super);
     function Track(parent) {
@@ -259,4 +225,113 @@ var Util = (function () {
     };
     return Util;
 }());
+var Drive;
+(function (Drive) {
+    var Down = (function () {
+        function Down(c) {
+            this.car = c;
+            this.jumpDirection = +45;
+        }
+        Down.prototype.draw = function () {
+            this.car.x += this.car.speed;
+            this.car.y += this.jumpDirection;
+            if (this.car.y > 0) {
+                this.jumpDirection = 0;
+            }
+        };
+        Down.prototype.onKeyDown = function () {
+        };
+        return Down;
+    }());
+    Drive.Down = Down;
+})(Drive || (Drive = {}));
+var Drive;
+(function (Drive) {
+    var Forward = (function () {
+        function Forward(c) {
+            this.car = c;
+            this.car.speed = 4;
+        }
+        Forward.prototype.draw = function () {
+            this.car.x += this.car.speed;
+        };
+        Forward.prototype.onKeyDown = function () {
+        };
+        return Forward;
+    }());
+    Drive.Forward = Forward;
+})(Drive || (Drive = {}));
+var Drive;
+(function (Drive) {
+    var Off = (function () {
+        function Off(c) {
+            this.car = c;
+        }
+        Off.prototype.draw = function () {
+            this.car.speed = 0;
+            ;
+        };
+        Off.prototype.onKeyDown = function (event) {
+            switch (event.keyCode) {
+                case 39:
+                    this.car.behaviour = new Drive.Forward(this.car);
+                    break;
+            }
+        };
+        return Off;
+    }());
+    Drive.Off = Off;
+})(Drive || (Drive = {}));
+var Drive;
+(function (Drive) {
+    var Reverse = (function () {
+        function Reverse(c) {
+            this.car = c;
+            this.car.speed = -3;
+        }
+        Reverse.prototype.draw = function () {
+            this.car.x += this.car.speed;
+        };
+        Reverse.prototype.onKeyDown = function () {
+        };
+        return Reverse;
+    }());
+    Drive.Reverse = Reverse;
+})(Drive || (Drive = {}));
+var Drive;
+(function (Drive) {
+    var speedUp = (function () {
+        function speedUp(c) {
+            this.car = c;
+        }
+        speedUp.prototype.draw = function () {
+            this.car.speed = 5;
+            this.car.x += this.car.speed;
+        };
+        speedUp.prototype.onKeyDown = function () {
+        };
+        return speedUp;
+    }());
+    Drive.speedUp = speedUp;
+})(Drive || (Drive = {}));
+var Drive;
+(function (Drive) {
+    var Up = (function () {
+        function Up(c) {
+            this.car = c;
+            this.jumpDirection = -45;
+        }
+        Up.prototype.draw = function () {
+            this.car.x += this.car.speed;
+            this.car.y += this.jumpDirection;
+            if (this.car.y > 0) {
+                this.jumpDirection = 0;
+            }
+        };
+        Up.prototype.onKeyDown = function () {
+        };
+        return Up;
+    }());
+    Drive.Up = Up;
+})(Drive || (Drive = {}));
 //# sourceMappingURL=main.js.map

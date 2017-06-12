@@ -1,4 +1,5 @@
-class speedUp implements Behaviour {
+namespace Drive {
+export class speedUp implements Behaviour {
     
     private car:Car;
 
@@ -15,6 +16,7 @@ class speedUp implements Behaviour {
         
     }
 
+}
 }
 
 

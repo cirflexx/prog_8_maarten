@@ -1,4 +1,5 @@
-class Off implements Behaviour {
+namespace Drive {
+export class Off implements Behaviour {
     
     private car:Car;
     
@@ -11,8 +12,9 @@ class Off implements Behaviour {
     onKeyDown(event:KeyboardEvent){
         switch(event.keyCode){
         case 39:            
-            this.car.behaviour = new Driving(this.car);
+            this.car.behaviour = new Drive.Forward(this.car);
             break;
         }
     }
+}
 }
