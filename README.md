@@ -1,23 +1,30 @@
 Link: https://xdbullit.github.io/prog_8_maarten/
 
-
 De typscript code is te vinden in de dev folder.
 
 ### Singleton:
 In game.ts wordt er een instance gemaakt van de game, daardoor is die in alle bestand aanspreekbaar.
 
 ### Observer:
+De observerable is de Car, De wielen zijn de observers. Als de Car crasht krijgen de wielen een notificatie d.m.v. van notify()
 
 ### Namespaces:
+De namespaces gebruik ik voor verduidelijking van de code. Zo heb ik het gebruikt voor de behaviours van de car. Elk behaviour heeft een namespace drive, met daar achter zijn eigen speciefieke functie. Zo staat er duidelijk in de code, Drive.Forward. 
 
 ### Polymorphism:
 
 ### Enumeraties:
+De enumeraties slaan de key codes op, zo kan ik in de code duidelijk maken om welke key het gaat ipv alleen het nummer staat er nu keys.up 
 
 ### Abstract:
+Gameobject.ts is een abstracte class
 
 ### Static:
 De game instance is static, zo kan het in elk bestand aangeroepen worden.
+Ook de util functies zijn static, deze kunnen ook in elk bestand aangeroepen worden.
+
+### Gameloop:
+De gameloop wordt aangemaakt en aangeroepen in game.ts
 
 ### Inheritance: 
 Car en track erven de div,x en y positie van gameobject.ts
@@ -33,10 +40,10 @@ Gameobject.ts maakt gebruik van protected startposition(). Zo kunnen alleen de c
 ### Strategy:
 De car heeft verschillende behaviours, de behaviour.ts is een interface die wordt aangeroepen door strategy calls. 
 Zo heeft de car de volgende behaviours:
--driving
--drivingDown
--drivingReverse
--drivingUp
+-Forward
+-Down
+-Reverse
+-Up
 -off
 -speedUp
 

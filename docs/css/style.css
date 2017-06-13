@@ -22,7 +22,7 @@ container {
 }
 
 sky {
-    background-image: url(../images/sky.png);
+    background-image: url(../images/plateau.png);
     background-repeat: repeat-x;
     width:1600px; height:600px;
     animation: skyanimation 8s linear infinite;
@@ -53,15 +53,14 @@ wheel {
     width:22px; height: 22px;
 }
 
-cloud {
-    background-image: url(../images/cloud.png);
-    width:150px; height: 57px;
-    animation: cloudanimation 19s linear infinite;
-}
-
 block {
     background-image: url(../images/block.png);
     width:626px; height: 46px;
+}
+
+oil {
+    background-image: url(../images/oil.png);
+    width:250px; height: 250px;
 }
 
 @keyframes cloudanimation {

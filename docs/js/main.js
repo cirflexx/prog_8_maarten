@@ -31,7 +31,11 @@ var gameobject = (function () {
     gameobject.prototype.startPosition = function (PosX, PosY) {
         this.x = PosX;
         this.y = PosY;
+    };
+    gameobject.prototype.draw = function () {
         this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
+    };
+    gameobject.prototype.hitCar = function (c) {
     };
     return gameobject;
 }());
@@ -128,7 +132,7 @@ var Car = (function (_super) {
 var Game = (function () {
     function Game() {
         var _this = this;
-        this.tracks = new Array();
+        this.gameobjects = new Array();
         this.score = 0;
         this.spawnCounter = 0;
         this.end = false;
@@ -149,39 +153,32 @@ var Game = (function () {
         var _this = this;
         this.spawnCounter++;
         if (this.spawnCounter > 180) {
-            this.tracks.push(new Track(this.container));
+            this.gameobjects.push(new Track(this.container), new Oil(this.container));
             this.spawnCounter = 0;
-            this.score++;
-            document.getElementById("score").innerHTML = "Score: " + this.score.toString();
+            this.updateScore(1);
         }
-        this.updateElements();
         this.car.draw();
-        for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
-            var t = _a[_i];
-            if (t.x < 0 - t.width) {
-                Util.removeFromGame(t, this.tracks);
-            }
-            if (Util.checkCollision(this.car, t)) {
-                Util.removeFromGame(t, this.tracks);
-                this.lives--;
-                if (this.lives == -1) {
-                    this.car.crash();
-                }
-                document.getElementById("lives").innerHTML = "Levens: " + this.lives.toString();
+        for (var _i = 0, _a = this.gameobjects; _i < _a.length; _i++) {
+            var go = _a[_i];
+            go.draw();
+            if (Util.checkCollision(this.car, go)) {
+                go.hitCar(this.car);
             }
         }
-        if (this.end) {
-            console.log("stop");
-        }
-        else {
+        if (!this.end) {
             requestAnimationFrame(function () { return _this.gameLoop(); });
         }
     };
-    Game.prototype.updateElements = function () {
-        for (var _i = 0, _a = this.tracks; _i < _a.length; _i++) {
-            var t = _a[_i];
-            t.draw();
+    Game.prototype.reduceLife = function () {
+        this.lives--;
+        if (this.lives == -1) {
+            this.car.crash();
         }
+        document.getElementById("lives").innerHTML = "Levens: " + this.lives.toString();
+    };
+    Game.prototype.updateScore = function (n) {
+        this.score += n;
+        document.getElementById("score").innerHTML = "Score: " + this.score.toString();
     };
     Game.prototype.endGame = function () {
         this.end = true;
@@ -191,6 +188,25 @@ var Game = (function () {
 window.addEventListener("load", function () {
     var g = Game.getInstance();
 });
+var Oil = (function (_super) {
+    __extends(Oil, _super);
+    function Oil(parent) {
+        _super.call(this, parent, "oil");
+        this.x = window.innerWidth + 700;
+        this.y = 45 * Math.ceil(Math.random() * 10);
+        this.speed = -5;
+        this.width = 626;
+        this.height = 45;
+    }
+    Oil.prototype.draw = function () {
+        this.x += this.speed;
+        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+    };
+    Oil.prototype.hitCar = function (c) {
+        c.behaviour = new Drive.speedUp(c);
+    };
+    return Oil;
+}(gameobject));
 var Track = (function (_super) {
     __extends(Track, _super);
     function Track(parent) {
@@ -203,7 +219,14 @@ var Track = (function (_super) {
     }
     Track.prototype.draw = function () {
         this.x += this.speed;
+        if (this.x < 0 - this.width) {
+            Util.removeFromGame((this), Game.getInstance().gameobjects);
+        }
         this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+    };
+    Track.prototype.hitCar = function (c) {
+        Util.removeFromGame((this), Game.getInstance().gameobjects);
+        Game.getInstance().reduceLife();
     };
     return Track;
 }(gameobject));
