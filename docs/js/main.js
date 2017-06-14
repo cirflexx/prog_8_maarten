@@ -88,8 +88,7 @@ var Car = (function (_super) {
             this.behaviour = new Drive.Down(this);
         }
         if (this.x > 675) {
-            this.speed = -1;
-            this.x += this.speed;
+            this.behaviour = new Drive.Reverse(this);
         }
         if (this.x < 0) {
             this.behaviour = new Drive.Forward(this);
@@ -206,6 +205,7 @@ var Oil = (function (_super) {
         _super.prototype.draw.call(this);
     };
     Oil.prototype.hitCar = function (c) {
+        c.behaviour = new Drive.speedUp(c);
         console.log("hitoil");
     };
     return Oil;

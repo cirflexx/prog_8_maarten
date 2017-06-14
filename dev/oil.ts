@@ -24,7 +24,7 @@ class Oil extends gameobject {
     }
 
     public hitCar(c: Car) {
-        // c.behaviour = new Drive.speedUp(c); 
+        c.behaviour = new Drive.speedUp(c); 
         console.log("hitoil");
     }
 }

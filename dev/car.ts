@@ -59,8 +59,7 @@ class Car extends gameobject implements Subject {
             this.behaviour = new Drive.Down(this);
         }
         if(this.x > 675){
-            this.speed = -1;
-            this.x += this.speed;
+            this.behaviour = new Drive.Reverse(this);
         }
         if(this.x < 0){
             this.behaviour = new Drive.Forward(this);

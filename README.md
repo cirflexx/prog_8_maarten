@@ -14,7 +14,7 @@ De observerable is de Car, De wielen zijn de observers. Als de Car crasht krijge
 De namespaces gebruik ik voor verduidelijking van de code. Zo heb ik het gebruikt voor de behaviours van de car. Elk behaviour heeft een namespace drive, met daar achter zijn eigen speciefieke functie. Zo staat er duidelijk in de code, Drive.Forward. 
 
 ### Polymorphism:
-Track en oil worden in de gameobjects array gestopt.
+Track en oil worden in de gameobjects array gestopt. Hierdoor kan in de game 1 for loop gemaakt worden. Waarna de functie van hitcar uitgevoerd wordt van oil en track.
 
 ### Enumeraties:
 De enumeraties slaan de key codes op, zo kan ik in de code duidelijk maken om welke key het gaat ipv alleen het nummer staat er nu keys.up 
