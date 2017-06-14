@@ -51,6 +51,7 @@ Zo heeft de car de volgende behaviours:
 -speedUp
 
 UML: http://imgur.com/PtvGWds
+UML_week7: http://imgur.com/362vwyJ
 
 ### Installatie instructies:
 
