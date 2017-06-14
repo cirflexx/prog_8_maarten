@@ -3,7 +3,6 @@ class Track extends gameobject {
     public speed: number;
     public div: HTMLElement;
     public parent: HTMLElement;
-    
 
     constructor(parent: HTMLElement) {
         super(parent, "block");
@@ -20,7 +19,7 @@ class Track extends gameobject {
         if (this.x < 0 - this.width) {
             Util.removeFromGame((this), Game.getInstance().gameobjects);
         }
-        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+        super.draw();
     }
 
     public hitCar(c: Car) {

@@ -1,5 +1,5 @@
 body {
-    background-color: #666;
+    background-color: darkblue;
     font-family: Arial, Helvetica, sans-serif;
     overflow:hidden;
     margin:0px; padding:0px;
@@ -19,6 +19,7 @@ container {
     left: 50%; top: 50%;
     transform: translate(-50%, -50%);
     overflow:hidden;
+    background-color: darkgray;
 }
 
 sky {

@@ -2,10 +2,8 @@ class Game {
 
     private car: Car;
     private track: Track;
-    //private tracks : Array<Track> = new Array<Track>();
 
     private oil: Oil;
-    //private oils : Array<Oil> = new Array<Oil>();
     private gameobject: gameobject;
     public gameobjects: Array<gameobject> = new Array<gameobject>();
 
@@ -25,7 +23,6 @@ class Game {
 
         document.getElementById("lives").innerHTML = "lives: " + this.lives.toString();
         document.getElementById("score").innerHTML = "Score: " + this.score.toString();
-        // this.track = new Track(this.container,);
         requestAnimationFrame(() => this.gameLoop());
     }
 
@@ -42,9 +39,6 @@ class Game {
         if (this.spawnCounter > 180) {
 
             this.gameobjects.push(new Track(this.container), new Oil(this.container));
-
-            //this.tracks.push(new Track(this.container));
-            //this.oils.push(new Oil(this.container));
             this.spawnCounter = 0;
             this.updateScore(1);
         }

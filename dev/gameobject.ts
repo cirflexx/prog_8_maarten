@@ -9,7 +9,9 @@ abstract class gameobject {
     constructor(tagname:HTMLElement,divname:string){
         
         this.div = document.createElement(divname);
-        tagname.appendChild(this.div);
+        //tagname.appendChild(this.div);
+
+        tagname.insertBefore( this.div, tagname.firstChild );
     }
 
     protected startPosition(PosX:number,PosY:number){

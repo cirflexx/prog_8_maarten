@@ -26,7 +26,7 @@ var Wheel = (function () {
 var gameobject = (function () {
     function gameobject(tagname, divname) {
         this.div = document.createElement(divname);
-        tagname.appendChild(this.div);
+        tagname.insertBefore(this.div, tagname.firstChild);
     }
     gameobject.prototype.startPosition = function (PosX, PosY) {
         this.x = PosX;
@@ -107,7 +107,7 @@ var Car = (function (_super) {
             setTimeout(function () { return _this.removeCar(); }, 2000);
         }
         else {
-            this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+            _super.prototype.draw.call(this);
         }
         this.wheel1.draw();
         this.wheel2.draw();
@@ -195,15 +195,18 @@ var Oil = (function (_super) {
         this.x = window.innerWidth + 700;
         this.y = 45 * Math.ceil(Math.random() * 10);
         this.speed = -5;
-        this.width = 626;
-        this.height = 45;
+        this.width = 250;
+        this.height = 250;
     }
     Oil.prototype.draw = function () {
         this.x += this.speed;
-        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+        if (this.x < 0 - this.width) {
+            Util.removeFromGame((this), Game.getInstance().gameobjects);
+        }
+        _super.prototype.draw.call(this);
     };
     Oil.prototype.hitCar = function (c) {
-        c.behaviour = new Drive.speedUp(c);
+        console.log("hitoil");
     };
     return Oil;
 }(gameobject));
@@ -222,7 +225,7 @@ var Track = (function (_super) {
         if (this.x < 0 - this.width) {
             Util.removeFromGame((this), Game.getInstance().gameobjects);
         }
-        this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)";
+        _super.prototype.draw.call(this);
     };
     Track.prototype.hitCar = function (c) {
         Util.removeFromGame((this), Game.getInstance().gameobjects);

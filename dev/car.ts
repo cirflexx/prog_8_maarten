@@ -82,7 +82,7 @@ class Car extends gameobject implements Subject {
         }
         
         else{
-           this.div.style.transform = "translate(" + this.x + "px," + this.y + "px)"; 
+           super.draw();
         }
 
         this.wheel1.draw();
