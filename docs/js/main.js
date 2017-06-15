@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Wheel = (function () {
     function Wheel(parent, offset, c) {
         this.div = document.createElement("wheel");
@@ -50,17 +55,17 @@ var Keys;
 var Car = (function (_super) {
     __extends(Car, _super);
     function Car(parent) {
-        var _this = this;
-        _super.call(this, parent, "car");
-        this.observers = new Array();
-        this.startPosition(0, 225);
-        this.width = 145;
-        this.height = 45;
-        this.behaviour = new Drive.Off(this);
-        this.speed = 2;
-        this.wheel1 = new Wheel(this.div, 3, this);
-        this.wheel2 = new Wheel(this.div, 101, this);
+        var _this = _super.call(this, parent, "car") || this;
+        _this.observers = new Array();
+        _this.startPosition(0, 225);
+        _this.width = 145;
+        _this.height = 45;
+        _this.behaviour = new Drive.Off(_this);
+        _this.speed = 2;
+        _this.wheel1 = new Wheel(_this.div, 3, _this);
+        _this.wheel2 = new Wheel(_this.div, 101, _this);
         window.addEventListener("keydown", function (e) { return _this.onKeyDown(e); });
+        return _this;
     }
     Car.prototype.onKeyDown = function (e) {
         switch (e.keyCode) {
@@ -190,12 +195,13 @@ window.addEventListener("load", function () {
 var Oil = (function (_super) {
     __extends(Oil, _super);
     function Oil(parent) {
-        _super.call(this, parent, "oil");
-        this.x = window.innerWidth + 700;
-        this.y = 45 * Math.ceil(Math.random() * 10);
-        this.speed = -5;
-        this.width = 250;
-        this.height = 250;
+        var _this = _super.call(this, parent, "oil") || this;
+        _this.x = window.innerWidth + 700;
+        _this.y = 45 * Math.ceil(Math.random() * 10);
+        _this.speed = -5;
+        _this.width = 250;
+        _this.height = 250;
+        return _this;
     }
     Oil.prototype.draw = function () {
         this.x += this.speed;
@@ -213,12 +219,13 @@ var Oil = (function (_super) {
 var Track = (function (_super) {
     __extends(Track, _super);
     function Track(parent) {
-        _super.call(this, parent, "block");
-        this.x = window.innerWidth + 700;
-        this.y = 45 * Math.ceil(Math.random() * 10);
-        this.speed = -5;
-        this.width = 626;
-        this.height = 45;
+        var _this = _super.call(this, parent, "block") || this;
+        _this.x = window.innerWidth + 700;
+        _this.y = 45 * Math.ceil(Math.random() * 10);
+        _this.speed = -5;
+        _this.width = 626;
+        _this.height = 45;
+        return _this;
     }
     Track.prototype.draw = function () {
         this.x += this.speed;

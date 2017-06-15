@@ -20,7 +20,7 @@ class Game {
     constructor() {
         this.container = document.getElementById("container");
         this.car = new Car(this.container);
-
+        
         document.getElementById("lives").innerHTML = "lives: " + this.lives.toString();
         document.getElementById("score").innerHTML = "Score: " + this.score.toString();
         requestAnimationFrame(() => this.gameLoop());
