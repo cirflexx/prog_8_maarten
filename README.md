@@ -79,10 +79,10 @@ Draw wordt inderdaad gerft met de super() functie. Eigenlijk voegt dit niet veel
 - UML - Je UML is duidelijk op een paar foutjes na. Zo staat er dan gameobject een game heeft, maar dit is natuurlijk andersom. Er staat ook een lijn met een battleje eraan van car naar de Interface Behavior, een battletje met rondje is niets. Het lijkt ook dat Utils en Enum geen connectie heeft met andere classes, maar game gebruikt Utils en Car gebruikt Enum. 
 
 
-+++ Beoordeling
+## Beoordeling
 Voldoende
 
-++++ Uitleg beoordeling
+### Uitleg beoordeling
 Elk onderdeel was goed uitgewerkt, sommige beter dan de andere. Soms zitten er kleine aandachtspunten of foutjes is die ik bij het onderdeel zelf heb geschreven. Deze aandachtspunten en foutjes zijn veelal klein en kan makkelijk verbeterd worden. Om deze reden heb ik je een voldoende gegeven, want de game draaide soepel zonder fouten en de code was ook goed gestructureerd, alleen comments mogen erbij.
 
 Goed gedaan!
